@@ -1,21 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BuildingBlock.Specification.Visitors
+﻿namespace BuildingBlock.Specification.Visitors
 {
+    using System;
+    using System.Linq.Expressions;
+
     public abstract class EFExpressionVisitor<TEntity, TVisitor, TItem>
                          where TVisitor : ISpecificationVisitor<TVisitor, TItem>
     {
-        public Expression<Func<TEntity, bool>> Expr { get; protected set; } //; = e => true;
+        public Expression<Func<TEntity, bool>> Expr { get; protected set; }
 
         public abstract Expression<Func<TEntity, bool>> ConvertSpecToExpression(ISpecification<TItem, TVisitor> spec);
-
-      
 
         public void Visit(AndSpecification<TItem, TVisitor> spec)
         {
@@ -31,19 +24,6 @@ namespace BuildingBlock.Specification.Visitors
             Expr = Expression.Lambda<Func<TEntity, bool>>(exprBody, paramExpr);
         }
 
-        public void Visit(OrSpecification<TItem, TVisitor> spec)
-        {
-            var leftExpr = ConvertSpecToExpression(spec.Left);
-            var rightExpr = ConvertSpecToExpression(spec.Right);
-
-            var exprBody =  Expression.Or(leftExpr.Body, rightExpr.Body);
-
-            var paramExpr = Expression.Parameter(typeof(TEntity));
-            exprBody = (BinaryExpression)new ParameterReplacer(paramExpr).Visit(exprBody);
-
-            Expr = Expression.Lambda<Func<TEntity, bool>>(exprBody, paramExpr);
-        }
-
         public void Visit(NotSpecification<TItem, TVisitor> spec)
         {
             var specExpr = ConvertSpecToExpression(spec.Specification);
@@ -51,10 +31,22 @@ namespace BuildingBlock.Specification.Visitors
             var exprBody = Expression.Not(specExpr.Body);
 
             var paramExpr = Expression.Parameter(typeof(TEntity));
-            exprBody =(UnaryExpression)new ParameterReplacer(paramExpr).Visit(exprBody);
+            exprBody = (UnaryExpression)new ParameterReplacer(paramExpr).Visit(exprBody);
 
             Expr = Expression.Lambda<Func<TEntity, bool>>(exprBody, paramExpr);
-        
+        }
+
+        public void Visit(OrSpecification<TItem, TVisitor> spec)
+        {
+            var leftExpr = ConvertSpecToExpression(spec.Left);
+            var rightExpr = ConvertSpecToExpression(spec.Right);
+
+            var exprBody = Expression.Or(leftExpr.Body, rightExpr.Body);
+
+            var paramExpr = Expression.Parameter(typeof(TEntity));
+            exprBody = (BinaryExpression)new ParameterReplacer(paramExpr).Visit(exprBody);
+
+            Expr = Expression.Lambda<Func<TEntity, bool>>(exprBody, paramExpr);
         }
     }
 
@@ -217,11 +209,17 @@ namespace BuildingBlock.Specification.Visitors
             }
         }
         */
-
     public class ParameterReplacer : ExpressionVisitor
     {
         private readonly ParameterExpression _parameter;
+
         private readonly Type _type;
+
+        internal ParameterReplacer(ParameterExpression parameter)
+        {
+            _type = parameter.Type;
+            _parameter = parameter;
+        }
 
         protected override Expression VisitParameter(ParameterExpression node)
         {
@@ -231,27 +229,5 @@ namespace BuildingBlock.Specification.Visitors
             }
             return node;
         }
-
-        internal ParameterReplacer(ParameterExpression parameter)
-        {
-            _type = parameter.Type;
-            _parameter = parameter;
-        }
     }
-
-   /* public class MemberReplacer : ExpressionVisitor
-    {
-        private readonly MemberExpression _member;
-
-
-        protected override Expression VisitMember(MemberExpression node)
-        {
-            return base.VisitMember(_member);
-        }
-
-        internal MemberReplacer(MemberExpression member)
-        {
-            _member = member;
-        }
-    }*/
 }

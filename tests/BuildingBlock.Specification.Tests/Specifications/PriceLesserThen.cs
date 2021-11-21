@@ -1,23 +1,18 @@
-﻿using BuildingBlock.Specification.Tests.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BuildingBlock.Specification.Tests.Specifications
+﻿namespace BuildingBlock.Specification.Tests.Specifications
 {
-	public class PriceLesserThen : ISpecification<Product, IProductSpecificationVisitor>
-	{
-		public PriceLesserThen(double limit)
-		{
-			Limit = limit;
-		}
+    using BuildingBlock.Specification.Tests.Models;
 
-		public double Limit { get; }
+    public class PriceLesserThen : ISpecification<Product, IProductSpecificationVisitor>
+    {
+        public PriceLesserThen(double limit)
+        {
+            Limit = limit;
+        }
 
-		public bool IsSatisfiedBy(Product item) => item.Price < Limit;
+        public double Limit { get; }
 
-		public void Accept(IProductSpecificationVisitor visitor) => visitor.Visit(this);
-	}
+        public void Accept(IProductSpecificationVisitor visitor) => visitor.Visit(this);
+
+        public bool IsSatisfiedBy(Product item) => item.Price < Limit;
+    }
 }

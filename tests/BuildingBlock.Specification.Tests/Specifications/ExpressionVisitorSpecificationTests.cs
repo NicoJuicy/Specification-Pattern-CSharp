@@ -9,7 +9,6 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    //https://fabiomarreco.github.io/blog/2018/specificationpattern-with-entityframework/
     [TestClass]
     public class EFExpressionVisitorSpecificationTests
     {

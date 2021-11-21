@@ -1,14 +1,11 @@
-﻿using BuildingBlock.Specification.Tests.Models;
-using BuildingBlock.Specification.Visitors;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BuildingBlock.Specification.Tests.Specifications
+﻿namespace BuildingBlock.Specification.Tests.Specifications
 {
+    using BuildingBlock.Specification.Tests.Models;
+    using BuildingBlock.Specification.Visitors;
+    using System;
+    using System.Linq;
+    using System.Linq.Expressions;
+
     /// <summary>
     /// This is an implementation when the Specification has to be implemented with Expressions
     /// </summary>
@@ -22,10 +19,9 @@ namespace BuildingBlock.Specification.Tests.Specifications
         }
 
         public void Visit(PriceGreaterThen spec) => Expr = expr => expr.Price >= spec.Limit;
-       
 
         public void Visit(PriceLesserThen spec) => Expr = expr => expr.Price < spec.Limit;
-      
+
         public void Visit(ProductOfCategory spec)
         {
             string category = spec.Category;
@@ -37,7 +33,5 @@ namespace BuildingBlock.Specification.Tests.Specifications
             string tag = spec.Tag;
             Expr = expr => expr.Tags.Any(dl => dl.Name.Equals(tag));
         }
-
-
     }
 }
