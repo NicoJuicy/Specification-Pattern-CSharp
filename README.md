@@ -5,4 +5,4 @@ Or [SQL tests](https://github.com/NicoJuicy/Specification-Pattern-CSharp/blob/ma
 
 It also contains a enumarable specification helper for custom logic. Eg. When you have a 
 
-(conditional1 or conditional 2) and (conditional 3)
+(conditional1 or conditional 2) and (conditional 3) or the inverse
