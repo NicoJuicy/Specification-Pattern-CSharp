@@ -58,7 +58,7 @@
     <Compile Include="Specifications\PriceGreaterThen.cs" />
     <Compile Include="Specifications\PriceLesserThen.cs" />
     <Compile Include="Specifications\ProductOfCategory.cs" />
-    <Compile Include="Specifications\ExpressionVisitorSpecificationTests.cs" />
+    <Compile Include="ExpressionVisitorSpecificationTests.cs" />
     <Compile Include="SqlVisitorSpecificationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
